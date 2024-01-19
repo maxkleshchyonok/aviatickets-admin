@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './App.css';
+import Booking from './app/bookings/booking.page';
 import ChatPage from 'src/app/chat/chat.page';
 import { useAppDispatch, useAppSelector } from 'src/hooks/redux.hooks';
 import { chatSelector } from 'src/app/chat/store/chat.selector';
