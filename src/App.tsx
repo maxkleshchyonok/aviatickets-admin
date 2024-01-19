@@ -7,6 +7,7 @@ import { chatSelector } from 'src/app/chat/store/chat.selector';
 import { connectToSocket, disconnectFromSocket } from 'src/app/chat/store/chat.actions';
 import { AppBar } from '@mui/material';
 import ButtonAppBar from './components/button-app-bar.comp';
+import { SnackbarProvider } from 'notistack';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -28,6 +29,7 @@ function App() {
 
   return (
     <>
+      <SnackbarProvider autoHideDuration={5000}/>
       <ButtonAppBar/>
       <Booking/>
     </>
