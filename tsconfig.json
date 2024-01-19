@@ -19,14 +19,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "baseUrl": "./",
-    "paths" : {
-      "./*" : ["./src/*"],
-      "submodule/*" : ["./aviatickets-submodule/*"]
-    },
     "jsx": "react-jsx"
   },
   "include": [
-    "src",
-    "aviatickets-submodule"
+    "src"
   ]
 }
