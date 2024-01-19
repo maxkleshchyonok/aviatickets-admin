@@ -1,23 +1,63 @@
-import React from 'react'
-import { TableCell, TableRow, TableHead, Table, TableContainer, TableBody, Paper, TablePagination } from '@mui/material'
-import { Row } from './CollapseRow/collapse-row.comp'
-import { useState } from 'react'
-import { BookingDto } from 'src/aviatickets-submodule/libs/types/booking.dto'
+import React, { useEffect } from "react";
+import {
+  TableCell,
+  TableRow,
+  TableHead,
+  Table,
+  TableContainer,
+  TableBody,
+  Paper,
+  TablePagination,
+} from "@mui/material";
+import { Row } from "./CollapseRow/collapse-row.comp";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "src/hooks/redux.hooks";
+import { getAllBookings } from "../store/bookings.actions";
+import { bookingsSelector } from "../store/bookings.selector";
+import CenteredLoader from "src/aviatickets-submodule/libs/components/centered-loader.comp";
+import Message from "src/aviatickets-submodule/libs/components/message.comp";
 
+export default function BookingTable() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const dispatch = useAppDispatch();
+  const { isPending, errors, bookings, count } =
+    useAppSelector(bookingsSelector);
 
-type Props = {
-  bookings: BookingDto[]
-}
+  useEffect(() => {
+    const query = { pageNumber: currentPage, pageSize: pageSize };
+    dispatch(getAllBookings({ query }));
+  }, [dispatch, currentPage, pageSize]);
 
-export default function BookingTable({bookings}: Props) {
-  const [page, setPage] = useState(1)
+  useEffect(() => {
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
+  }, [bookings])
+
+  const handlePageSizeChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setPageSize(parseInt(event.target.value, 10));
+    setCurrentPage(1);
   };
-  
+
+  const handlePageChange = (event: unknown, newPage: number) => {
+    setCurrentPage(newPage+1);
+  };
+
+  if (isPending.bookings) {
+    return <CenteredLoader/>
+  }
+
+  if (errors.bookings) {
+    return <Message title='Erorr ocurred' text={errors.bookings}/>
+  }
+
+  if (count === 0) {
+    return <Message title='No bookings found' text='=('/>
+  }
+
   return (
-    <Paper sx={{padding: '20px'}}>
+    <Paper sx={{ padding: "20px" }}>
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
@@ -33,19 +73,21 @@ export default function BookingTable({bookings}: Props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {bookings.slice(page * 5, page * 5 + 5).map((item, index) => (
-              <Row key={index} row={item} />
-              ))}
+            {bookings.map((item, index) => 
+            <Row key={index} row={item}/>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        component='div'
-        count={bookings.length}
-        rowsPerPage={5}
-        page={page}
-        onPageChange={handleChangePage}
+        component="div"
+        count={count}
+        rowsPerPage={pageSize}
+        rowsPerPageOptions={[10, 20]}
+        page={currentPage-1}
+        onRowsPerPageChange={handlePageSizeChange}
+        onPageChange={handlePageChange}
       />
     </Paper>
-  )
+  );
 }
