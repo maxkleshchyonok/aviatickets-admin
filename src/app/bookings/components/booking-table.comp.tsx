@@ -16,6 +16,7 @@ import { getAllBookings } from "../store/bookings.actions";
 import { bookingsSelector } from "../store/bookings.selector";
 import CenteredLoader from "src/aviatickets-submodule/libs/components/centered-loader.comp";
 import Message from "src/aviatickets-submodule/libs/components/message.comp";
+import NamesRow from "src/app/bookings/components//NamesRow/names-row.comp";
 
 export default function BookingTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,16 +62,7 @@ export default function BookingTable() {
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>User id</TableCell>
-              <TableCell>User</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Origin</TableCell>
-              <TableCell>Destination</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell></TableCell>
-            </TableRow>
+            <NamesRow/>
           </TableHead>
           <TableBody>
             {bookings.map((item, index) => 
