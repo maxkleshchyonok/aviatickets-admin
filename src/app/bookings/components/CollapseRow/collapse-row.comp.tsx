@@ -6,25 +6,50 @@ import FlightTable from "../FlightTable/flight-table.comp";
 import { red } from "@mui/material/colors";
 import { stat } from "fs";
 import { BookingDto } from "src/aviatickets-submodule/libs/types/booking.dto";
+import { useSnackbar } from "src/aviatickets-submodule/libs/components/customSnackbar/hooks/useSnackbar";
+import { useAppDispatch, useAppSelector } from "src/hooks/redux.hooks";
+import { CustomError, cancelBooking } from "src/app/bookings/store/bookings.actions";
+import { bookingsSelector } from "src/app/bookings/store/bookings.selector";
+import CustomSnackbar from "src/aviatickets-submodule/libs/components/customSnackbar/custom-snackbar.comp";
 
-enum statusColors{
-  'Booked' = 'blue',
-  'Payed' = 'green',
-  'Cancelled' = 'red'
+const statusColors = {
+  'Booked' : 'primary',
+  'Payed' : 'green',
+  'Cancelled' : 'error'
 }
 
 
 export function Row(props: { row: BookingDto }) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const dispatch = useAppDispatch()
+    const {errors, isPending} = useAppSelector(bookingsSelector)
+    const {snackbar, openSnackbar, handleClose} = useSnackbar()
+    
 
-    const handleCancel = () => {
-      row.status = 'Cancelled'
-      console.log(row.status)
+    const handleCancel = async () => {
+      const bookingId = {id: row.id}
+      const response = await dispatch(cancelBooking(bookingId))
+      console.log(response)
+       if (response.meta.requestStatus == 'rejected') {
+        const payload = response.payload as CustomError
+        openSnackbar(payload.message, 'error')
+       }
+       if (response.meta.requestStatus == 'fulfilled') {
+        openSnackbar('Succesfully cancelled booking', 'success')
+       }
+       
+
     }
   
     return (
       <React.Fragment>
+        <CustomSnackbar
+          open={snackbar.open} 
+          message={snackbar.message} 
+          severity={snackbar.severity} 
+          onClose={handleClose}
+        />
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>
             <IconButton
@@ -43,20 +68,24 @@ export function Row(props: { row: BookingDto }) {
           <TableCell>{row.origin}</TableCell>
           <TableCell>{row.destination}</TableCell>
           <TableCell>
-            <Typography display={"flex"}>{row.status}</Typography>
+            <Typography color={statusColors[row.status]}>{row.status}</Typography>
           </TableCell>
           <TableCell >
-              {row.status == 'Booked'
-              ? <Button onClick={handleCancel} variant="outlined" color="error"> Cancel</Button>
-              : null}
+              <Button 
+              onClick={handleCancel}
+              variant="outlined"
+              color="error" 
+              disabled={isPending.update}
+              > Cancel</Button>
           </TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0, border: 0}} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
-                <PassengerTable passengers={row.passengers}/>
-                <FlightTable flights={row.routeForward.concat(row.routeBackward)}/>
+                {row.passengers ? <PassengerTable passengers={row.passengers}/> : null}
+                {row.toDestinationRoute.length ? <FlightTable text='To Destination' flights={row.toDestinationRoute}/> : null}
+                {row.toOriginRoute.length ? <FlightTable text='To Origin' flights={row.toOriginRoute}/> : null}
               </Box>
             </Collapse>
           </TableCell>
