@@ -6,11 +6,10 @@ import FlightTable from "../FlightTable/flight-table.comp";
 import { red } from "@mui/material/colors";
 import { stat } from "fs";
 import { BookingDto } from "src/aviatickets-submodule/libs/types/booking.dto";
-import { useSnackbar } from "src/aviatickets-submodule/libs/components/customSnackbar/hooks/useSnackbar";
 import { useAppDispatch, useAppSelector } from "src/hooks/redux.hooks";
 import { CustomError, cancelBooking } from "src/app/bookings/store/bookings.actions";
 import { bookingsSelector } from "src/app/bookings/store/bookings.selector";
-import CustomSnackbar from "src/aviatickets-submodule/libs/components/customSnackbar/custom-snackbar.comp";
+import { useSnackbar } from "notistack";
 
 const statusColors = {
   'Booked' : 'primary',
@@ -24,7 +23,8 @@ export function Row(props: { row: BookingDto }) {
     const [open, setOpen] = React.useState(false);
     const dispatch = useAppDispatch()
     const {errors, isPending} = useAppSelector(bookingsSelector)
-    const {snackbar, openSnackbar, handleClose} = useSnackbar()
+    const {enqueueSnackbar} = useSnackbar()
+
     
 
     const handleCancel = async () => {
@@ -33,10 +33,10 @@ export function Row(props: { row: BookingDto }) {
       console.log(response)
        if (response.meta.requestStatus == 'rejected') {
         const payload = response.payload as CustomError
-        openSnackbar(payload.message, 'error')
+        enqueueSnackbar(payload.message, {variant: 'error'})
        }
        if (response.meta.requestStatus == 'fulfilled') {
-        openSnackbar('Succesfully cancelled booking', 'success')
+        enqueueSnackbar('Succesfully cancelled booking', {variant: 'success'})
        }
        
 
@@ -44,12 +44,6 @@ export function Row(props: { row: BookingDto }) {
   
     return (
       <React.Fragment>
-        <CustomSnackbar
-          open={snackbar.open} 
-          message={snackbar.message} 
-          severity={snackbar.severity} 
-          onClose={handleClose}
-        />
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
           <TableCell>
             <IconButton
