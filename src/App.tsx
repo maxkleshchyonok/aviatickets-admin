@@ -18,6 +18,7 @@ function App() {
   ]
   useEffect(() => {
     dispatch(connectToSocket(tokens[Math.floor(Math.random()*tokens.length)]))
+    localStorage.setItem('accessToken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImRmN2IxNDczLWVjYjctNDJlNC05YTU4LWI3OGIzNTc5ZTBlYyIsImRldmljZUlkIjoiNjBiNzY4YzUtOWU0NS00NzNkLWJlMjgtNDUxYjJhODUzODYyIiwicm9sZUlkIjoiMjE2ZmZiYTgtNDBjNi00NWY2LTg2MWUtMTY5YzU3ZDVkZDQ3Iiwicm9sZVR5cGUiOiJVc2VyIiwicGVybWlzc2lvbnMiOlsiQWxsIl0sImlhdCI6MTcwNTU5NzI2MCwiZXhwIjoxNzA1NjgzNjYwfQ.Wh33ai8dpnAwPVsPpEG3bBe6HAT4GDvRNuLq9Dtcnfc')
     return () => {
       if (chat.connected === true) {
         dispatch(disconnectFromSocket());
@@ -28,7 +29,7 @@ function App() {
   return (
     <>
       <ButtonAppBar/>
-      <ChatPage/>
+      <Booking/>
     </>
     
   );
