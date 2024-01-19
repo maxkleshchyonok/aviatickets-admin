@@ -2,24 +2,26 @@ import { TableRow, TableCell, Table, TableBody, TableHead, Typography } from '@m
 import { table } from 'console'
 import React from 'react'
 import { FlightDto } from 'src/aviatickets-submodule/libs/types/flight.dto'
+import dayjs from 'dayjs';
 
 type Props = {
-    flights: FlightDto[]
+    flights: FlightDto[],
+    text: string
 }
 
-export default function FlightTable({flights}: Props) {
+export default function FlightTable({flights, text}: Props) {
   return (
     <>
         <Typography variant="h6" gutterBottom component="div">
-            Flights
+            {text}
         </Typography>
         <Table size="small" aria-label="flights" sx={{marginBottom: 2}}>
             <TableHead>
             <TableRow>
-                <TableCell>Origin</TableCell>
-                <TableCell>Destination</TableCell>
-                <TableCell align="right">Departure</TableCell>
-                <TableCell align="right">Arrival</TableCell>
+                <TableCell>Origin city</TableCell>
+                <TableCell>Destination city</TableCell>
+                <TableCell >Departure</TableCell>
+                <TableCell >Arrival</TableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -29,9 +31,9 @@ export default function FlightTable({flights}: Props) {
                         {flight.originCity}
                     </TableCell>
                     <TableCell>{flight.destinationCity}</TableCell>
-                    <TableCell align="right">{flight.departureTime}</TableCell>
-                    <TableCell align="right">
-                        {flight.arrivalTime}
+                    <TableCell>{dayjs(flight.departureTime).format('YYYY-MM-DD HH:mm:ss')}</TableCell>
+                    <TableCell>
+                        {dayjs(flight.arrivalTime).format('YYYY-MM-DD HH:mm:ss')}
                     </TableCell>
                 </TableRow>
             ))}
