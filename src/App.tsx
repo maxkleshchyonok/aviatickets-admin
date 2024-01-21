@@ -7,6 +7,7 @@ import { chatSelector } from 'src/app/chat/store/chat.selector';
 import { connectToSocket, disconnectFromSocket } from 'src/app/chat/store/chat.actions';
 import { AppBar } from '@mui/material';
 import ButtonAppBar from './components/button-app-bar.comp';
+import { UsersPage } from './app/users/users.page';
 
 function App() {
   const dispatch = useAppDispatch()
@@ -27,8 +28,9 @@ function App() {
 
   return (
     <>
-      <ButtonAppBar/>
-      <ChatPage/>
+      {/* <ButtonAppBar/>
+      <ChatPage/> */}
+      <UsersPage />
     </>
     
   );
