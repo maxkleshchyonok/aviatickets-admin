@@ -11,6 +11,7 @@ import {
 import { AppBar } from "@mui/material";
 import ButtonAppBar from "./components/button-app-bar.comp";
 import { SnackbarProvider } from "notistack";
+import { UsersPage } from './app/users/users.page';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ function App() {
       <SnackbarProvider autoHideDuration={5000} />
       <ButtonAppBar />
       <Booking />
+      {/* <UsersPage /> */}
     </>
   );
 }
