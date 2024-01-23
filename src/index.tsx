@@ -4,6 +4,7 @@ import App from './App';
 import { SocketClient } from 'src/aviatickets-submodule/libs/socket/socket.client';
 import { Provider } from 'react-redux';
 import store from 'src/store';
+import { SnackbarProvider } from 'notistack';
 
 export const socketClient = new SocketClient()
 
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <Provider store={store}>
-    <App />
+    <SnackbarProvider autoHideDuration={3000}>
+      <App />
+    </SnackbarProvider>
   </Provider>
     
 );
