@@ -13,8 +13,8 @@ export type CustomError = {
 export const getAllBookings = createAsyncThunk<
   BookingsDto,
   { query: PaginationQueryDto },
-  { rejectValue: CustomError }>(
-  "bookings/getAllBookings", async ({query}, { rejectWithValue }) => {
+  { rejectValue: CustomError }
+>("bookings/getAllBookings", async ({ query }, { rejectWithValue }) => {
   try {
     const response = await axiosClient.get("/bookings/", {
       params: { ...query },
@@ -22,7 +22,7 @@ export const getAllBookings = createAsyncThunk<
     return response?.data;
   } catch (error) {
     if (axios.isAxiosError<CustomError>(error)) {
-      console.log(error)
+      console.log(error);
       return rejectWithValue(error.response?.data!);
     }
     return rejectWithValue({
@@ -33,26 +33,23 @@ export const getAllBookings = createAsyncThunk<
 });
 
 export const cancelBooking = createAsyncThunk<
-BookingDto,
-{id: string},
-{rejectValue: CustomError}>(
-  "bookings/cancelBooking",
-  async ({id}, {rejectWithValue}) => {
-    try {
-      const response = await axiosClient.post(`/bookings/${id}`, {
-        status: 'Cancelled'
-      })
-      return response?.data
+  BookingDto,
+  { id: string },
+  { rejectValue: CustomError }
+>("bookings/cancelBooking", async ({ id }, { rejectWithValue }) => {
+  try {
+    const response = await axiosClient.post(`/bookings/${id}`, {
+      status: "Cancelled",
+    });
+    return response?.data;
+  } catch (error) {
+    if (axios.isAxiosError<CustomError>(error)) {
+      console.log(error);
+      return rejectWithValue(error.response?.data!);
     }
-    catch (error) {
-      if (axios.isAxiosError<CustomError>(error)) {
-        console.log(error)
-        return rejectWithValue(error.response?.data!);
-      }
-      return rejectWithValue({
-        message: "Unknown erorr",
-        statusCode: 500,
-      } as CustomError);
-    }
+    return rejectWithValue({
+      message: "Unknown erorr",
+      statusCode: 500,
+    } as CustomError);
   }
-)
+});

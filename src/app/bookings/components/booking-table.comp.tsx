@@ -30,31 +30,27 @@ export default function BookingTable() {
     dispatch(getAllBookings({ query }));
   }, [dispatch, currentPage, pageSize]);
 
-  useEffect(() => {
-
-  }, [bookings])
-
   const handlePageSizeChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setPageSize(parseInt(event.target.value, 10));
     setCurrentPage(1);
   };
 
   const handlePageChange = (event: unknown, newPage: number) => {
-    setCurrentPage(newPage+1);
+    setCurrentPage(newPage + 1);
   };
 
   if (isPending.bookings) {
-    return <CenteredLoader/>
+    return <CenteredLoader />;
   }
 
   if (errors.bookings) {
-    return <Message title='Erorr ocurred' text={errors.bookings}/>
+    return <Message title="Erorr ocurred" text={errors.bookings} />;
   }
 
   if (count === 0) {
-    return <Message title='No bookings found' text='=('/>
+    return <Message title="No bookings found" text="=(" />;
   }
 
   return (
@@ -62,12 +58,12 @@ export default function BookingTable() {
       <TableContainer component={Paper}>
         <Table aria-label="collapsible table">
           <TableHead>
-            <NamesRow/>
+            <NamesRow />
           </TableHead>
           <TableBody>
-            {bookings.map((item, index) => 
-            <Row key={index} row={item}/>
-            )}
+            {bookings.map((item, index) => (
+              <Row key={index} row={item} />
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -76,7 +72,7 @@ export default function BookingTable() {
         count={count}
         rowsPerPage={pageSize}
         rowsPerPageOptions={[10, 20]}
-        page={currentPage-1}
+        page={currentPage - 1}
         onRowsPerPageChange={handlePageSizeChange}
         onPageChange={handlePageChange}
       />
