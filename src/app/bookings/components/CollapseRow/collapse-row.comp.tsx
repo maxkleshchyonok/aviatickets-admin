@@ -79,15 +79,17 @@ export function Row(props: { row: BookingDto }) {
           <Typography color={statusColors[row.status]}>{row.status}</Typography>
         </TableCell>
         <TableCell>
-          <Button
-            onClick={handleCancel}
-            variant="outlined"
-            color="error"
-            disabled={isPending.update}
-          >
-            {" "}
-            Cancel
-          </Button>
+          {row.status == "Booked" ? (
+            <Button
+              onClick={handleCancel}
+              variant="outlined"
+              color="error"
+              disabled={isPending.update}
+            >
+              {" "}
+              Cancel
+            </Button>
+          ) : null}
         </TableCell>
       </TableRow>
       <TableRow>
