@@ -1,17 +1,22 @@
 import React, { useEffect } from "react";
 import "./App.css";
 import Booking from "./app/bookings/booking.page";
-import ChatPage from "src/app/chat/chat.page";
-import { useAppDispatch, useAppSelector } from "src/hooks/redux.hooks";
-import { chatSelector } from "src/app/chat/store/chat.selector";
+import ChatPage from "app/chat/chat.page";
+import { useAppDispatch, useAppSelector } from "hooks/redux.hooks";
+import { chatSelector } from "app/chat/store/chat.selector";
 import {
   connectToSocket,
   disconnectFromSocket,
-} from "src/app/chat/store/chat.actions";
-import { AppBar } from "@mui/material";
-import ButtonAppBar from "./components/button-app-bar.comp";
+} from "app/chat/store/chat.actions";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { SnackbarProvider } from "notistack";
-import { UsersPage } from './app/users/users.page';
+import { BrowserRouter as Router } from "react-router-dom";
+import AppRoutes from "app.routes";
+import ErrorBoundaryComp from "components/error-boundary.comp";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
+const theme = createTheme();
 
 function App() {
   const dispatch = useAppDispatch();
@@ -37,12 +42,21 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
-      <SnackbarProvider autoHideDuration={5000} />
-      <ButtonAppBar />
-      <Booking />
-      {/* <UsersPage /> */}
-    </>
+    <ErrorBoundaryComp>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <SnackbarProvider
+          maxSnack={5}
+          autoHideDuration={5000}
+          style={{ fontSize: "16px" }}
+        >
+          <ThemeProvider theme={theme}>
+            <Router>
+              <AppRoutes />
+            </Router>
+          </ThemeProvider>
+        </SnackbarProvider>
+      </LocalizationProvider>
+    </ErrorBoundaryComp>
   );
 }
 
