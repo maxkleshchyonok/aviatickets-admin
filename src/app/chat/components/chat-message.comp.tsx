@@ -1,17 +1,15 @@
-import React from 'react'
-import MessageForm from 'src/app/chat/components/MessageInput/message-input.comp'
-import MessageList from 'src/app/chat/components/MessageList/message-list.comp'
-import { styled, Stack } from '@mui/material'
+import React from "react";
+import MessageForm from "app/chat/components/MessageInput/message-input.comp";
+import MessageList from "app/chat/components/MessageList/message-list.comp";
+import { styled, Stack } from "@mui/material";
 
-
-type Props = {}
-
+type Props = {};
 
 export default function ChatMessage({}: Props) {
   return (
     <>
-        <MessageList/>
-        <MessageForm/>
+      <MessageList />
+      <MessageForm />
     </>
-  )
+  );
 }

@@ -1,27 +1,27 @@
-import { Message } from "src/aviatickets-submodule/libs/socket/types/message";
+import { Message } from "aviatickets-submodule/libs/socket/types/message";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { socketClient } from "src/index";
-import { Client } from "src/app/chat/types/client";
+import { socketClient } from "index";
+import { Client } from "app/chat/types/client";
 
 export const connectToSocket = createAsyncThunk(
   "connectToSocket",
   async function (token: string) {
     return await socketClient.connect(token);
-  },
+  }
 );
 
 export const disconnectFromSocket = createAsyncThunk(
   "disconnectFromSocket",
   async function () {
     return await socketClient.disconnect();
-  },
+  }
 );
 
 export const sendMessage = createAsyncThunk(
   "sendMessage",
   async function (message: Message) {
     return await socketClient.emit("sendMessage", message);
-  },
+  }
 );
 
 export const getAwaitingClients = createAsyncThunk(
@@ -33,7 +33,7 @@ export const getAwaitingClients = createAsyncThunk(
         payload: { awaitingClients: clients },
       });
     });
-  },
+  }
 );
 
 export const addAwaitingClient = createAsyncThunk(
@@ -45,7 +45,7 @@ export const addAwaitingClient = createAsyncThunk(
         payload: { awaitingClient: client },
       });
     });
-  },
+  }
 );
 
 export const recieveMessage = createAsyncThunk(
@@ -58,5 +58,5 @@ export const recieveMessage = createAsyncThunk(
         payload: { message: receivedMessage },
       });
     });
-  },
+  }
 );

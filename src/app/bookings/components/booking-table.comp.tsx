@@ -11,12 +11,12 @@ import {
 } from "@mui/material";
 import { Row } from "./CollapseRow/collapse-row.comp";
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "src/hooks/redux.hooks";
+import { useAppDispatch, useAppSelector } from "hooks/redux.hooks";
 import { getAllBookings } from "../store/bookings.actions";
 import { bookingsSelector } from "../store/bookings.selector";
-import CenteredLoader from "src/aviatickets-submodule/libs/components/centered-loader.comp";
-import Message from "src/aviatickets-submodule/libs/components/message.comp";
-import NamesRow from "src/app/bookings/components//NamesRow/names-row.comp";
+import CenteredLoader from "aviatickets-submodule/libs/components/centered-loader.comp";
+import Message from "aviatickets-submodule/libs/components/message.comp";
+import NamesRow from "app/bookings/components//NamesRow/names-row.comp";
 
 export default function BookingTable() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -50,7 +50,7 @@ export default function BookingTable() {
   }
 
   if (count === 0) {
-    return <Message title="No bookings found" text="=(" />;
+    return <Message title="No bookings found" text="" />;
   }
 
   return (
