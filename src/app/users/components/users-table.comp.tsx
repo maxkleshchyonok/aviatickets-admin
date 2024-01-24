@@ -116,7 +116,7 @@ export const UsersTable = () => {
   }
 
   if (count === 0) {
-    return <Message title="No bookings found" text="" />;
+    return <Message title="No users found" text="" />;
   }
 
   return (

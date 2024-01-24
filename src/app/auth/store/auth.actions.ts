@@ -61,6 +61,10 @@ export const signUp = createAsyncThunk<
       LocalStorageKeys.AccessToken,
       response.data.accessToken
     );
+    localStorage.setItem(
+      LocalStorageKeys.RefreshToken,
+      response.data.refreshToken
+    );
     return response.data;
   } catch (error) {
     if (axios.isAxiosError<ApiError>(error)) {
@@ -100,6 +104,7 @@ export const resetPassword = createAsyncThunk<
 >("resetPassword", async (data, { rejectWithValue }) => {
   try {
     await repository.post("/auth/reset-password", data);
+    localStorage.removeItem(LocalStorageKeys.ResetToken);
     return true;
   } catch (error) {
     if (axios.isAxiosError<ApiError>(error)) {
@@ -162,6 +167,8 @@ export const signOut = createAsyncThunk<
 >("signOut", async (_, { rejectWithValue }) => {
   try {
     await repository.post("/auth/signout");
+    localStorage.removeItem(LocalStorageKeys.RefreshToken);
+    localStorage.removeItem(LocalStorageKeys.ResetToken);
     return localStorage.removeItem(LocalStorageKeys.AccessToken);
   } catch (error) {
     if (axios.isAxiosError<ApiError>(error)) {
